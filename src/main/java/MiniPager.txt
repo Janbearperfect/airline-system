@@ -1,0 +1,26 @@
+MiniPager框架
+        1.使用标注实现分页
+        2.解放程序员编写重复的分页代码
+        3纯的Dao代码
+实现：
+       分析:以结果为导向去分析，以程序员用例去分析
+       UserDao
+                List<User> findAll();
+                List<User> findPagerd()
+编写步骤
+         1.编写自定义标注
+                 @MiniPager：至少应该有一个表名的属性
+         2.编写切面：（核心框架代码）
+             a.要在配置类中启动AOP的功能   
+                   @EnableAspectJAutoProxy  启用Spring AOP的功能    
+                   @ComponentScan({"dao","service","util"}) 扫描包  
+             b.编写自定义切面
+                  util:PagerAspect（分页切面）      
+             c.自定义切面中的切点    
+                 	//1.自定义切点  检测service包及子包下所有方法
+					@Pointcut("execution(* service..*(..))")  
+					public void selfPointcut() {} 
+			 d.自定义通知 AroundAdvice
+			        	@Around("selfPointcut()")
+	                    public List aroundAdvice(ProceedingJoinPoint jp){} 只要是调用service包下类的方法，都要输出
+			   		 
